@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Notificaciones · Arquitectura Factory",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "viewBox": [1390, 760],
+    "views": [
+      { "id": "experiencia", "label": "01 · Experiencia de usuario", "focus": ["studio", "endpoint", "history"], "note": "Una interfaz para crear notificaciones y consultar los comprobantes de la sesión." },
+      { "id": "decision", "label": "02 · Decisión de diseño", "focus": ["endpoint", "factory"], "note": "La API valida los datos; NotificationFactory centraliza la creación del notificador." },
+      { "id": "canales", "label": "03 · Canales simulados", "focus": ["factory", "inapp", "email", "sms"], "note": "Tres productos implementan Notifier.send(). No se contactan proveedores externos." }
+    ]
+  },
+  "components": [
+    { "id": "studio", "type": "frontend", "label": "Centro de notificaciones", "sublabel": "Interfaz de usuario · Next.js", "pos": [50, 280], "size": [210, 80] },
+    { "id": "endpoint", "type": "backend", "label": "API de notificaciones", "sublabel": "POST /api/notifications", "pos": [440, 280], "size": [210, 80] },
+    { "id": "factory", "type": "backend", "label": "Fábrica de notificadores", "sublabel": "Selecciona por canal", "pos": [830, 280], "size": [240, 80] },
+    { "id": "history", "type": "database", "label": "Historial de la sesión", "sublabel": "Memoria local · sin persistencia", "pos": [50, 520], "size": [240, 80] },
+    { "id": "inapp", "type": "backend", "label": "Notificador en la app", "sublabel": "Comprobante de bandeja local", "pos": [1150, 60], "size": [220, 80] },
+    { "id": "email", "type": "backend", "label": "Notificador de correo", "sublabel": "Comprobante de correo simulado", "pos": [1150, 280], "size": [220, 80] },
+    { "id": "sms", "type": "backend", "label": "Notificador de SMS", "sublabel": "Comprobante de SMS simulado", "pos": [1150, 520], "size": [220, 80] }
+  ],
+  "connections": [
+    { "id": "submit", "from": "studio", "to": "endpoint", "label": "Solicitud / respuesta JSON", "variant": "emphasis" },
+    { "id": "select", "from": "endpoint", "to": "factory", "label": "Validar / crear / simular", "variant": "emphasis" },
+    { "id": "record", "from": "studio", "to": "history", "label": "Guardar comprobantes", "fromSide": "bottom", "toSide": "top" },
+    { "id": "create-inapp", "from": "factory", "to": "inapp", "label": "in-app" },
+    { "id": "create-email", "from": "factory", "to": "email", "label": "email", "labelAt": [1088, 260] },
+    { "id": "create-sms", "from": "factory", "to": "sms", "label": "sms" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Diseño desacoplado", "items": ["Un contrato común: Notifier.send(input).", "La API delega la creación en NotificationFactory."] },
+    { "dot": "violet", "title": "Alcance de la demostración", "items": ["Tres canales; todos generan comprobantes simulados.", "Sin envíos reales, base de datos ni credenciales."] }
+  ]
+}
